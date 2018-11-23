@@ -19,8 +19,8 @@ def tokenize(text, pattern=r"\p{L}+\p{P}?\p{L}+"):
 def create_matrix(filepath, mfw, window_size, stopwords):
     sparse_matrix = defaultdict(lambda: defaultdict(lambda: 0))
     for root, dirs, files in os.walk(filepath):
-        for file in files:
-            with open(os.path.join(root, file), "r", encoding="utf-8") as f:
+        for file_ in files:
+            with open(os.path.join(root, file_), "r", encoding="utf-8") as f:
                 data = f"[{f.read()[:-2]}]"
                 json_data = json.loads(data)
                 for row in json_data:
