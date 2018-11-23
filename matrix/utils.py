@@ -7,6 +7,9 @@ import nltk
 import regex as re
 
 
+STOPWORDS = set(nltk.stopwords("german"))
+
+
 def load_pickle(filepath):
     return pickle.load(filepath)
 
@@ -16,7 +19,7 @@ def tokenize(text, pattern=r"\p{L}+\p{P}?\p{L}+"):
         yield match.group(0)
 
 
-def create_matrix(filepath, mfw, window_size, stopwords):
+def create_matrix(filepath, mfw, window_size, stopwords=STOPWORDS):
     sparse_matrix = defaultdict(lambda: defaultdict(lambda: 0))
     for root, dirs, files in os.walk(filepath):
         for file_ in files:
