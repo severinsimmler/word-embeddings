@@ -5,10 +5,11 @@ import matrix
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(prog="fancy-name",
-                                     description="Coole Beschreibung.")
-    parser.add_argument('--wiki-dump', help="Filepath to Wikipedia dump.")
+    parser = argparse.ArgumentParser(prog="matrix-tool",
+                                     description="CLI tool to process a Wikipedia "
+                                                 "dump to a word-word matrix.")
+    parser.add_argument('--corpus-dir', help="Path to corpus directory.")
 
     args = parser.parse_args()
     
-    # hier dann die funktionsaufrufe
+    matrix = create_matrix(filepath, mfw, window_size, stopwords)
