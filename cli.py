@@ -17,5 +17,6 @@ if __name__ == "__main__":
 
     matrix = create_matrix(args["corpus_dir"],
                            args["mfw"],
-                           args["window_size"],
-                           args["output"])
+                           args["window_size"])
+
+    save_matrix(matrix, args["output"])

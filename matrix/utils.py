@@ -36,3 +36,7 @@ def create_matrix(filepath, mfw, window_size, stopwords):
                                         except IndexError:
                                             pass
                                         continue
+
+
+def save_matrix(matrix, filepath):
+    pass
