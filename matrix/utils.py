@@ -7,7 +7,7 @@ import nltk
 import regex as re
 
 
-STOPWORDS = set(nltk.stopwords("german"))
+STOPWORDS = set(nltk.corpus.stopwords.words("german"))
 
 
 def load_pickle(filepath):
