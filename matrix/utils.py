@@ -19,6 +19,15 @@ def tokenize(text, pattern=r"\p{L}+\p{P}?\p{L}+"):
         yield match.group(0)
 
 
+def create_frequency_list(filepath, limit, stopwords=STOPWORDS):
+    freq = collections.Counter()
+    for root, dirs, files in os.walk(filepath):
+        for file_ in files:
+            with open(os.path.join(root, file_), "r", encoding="utf-8") as f:
+                freq.update(list([token.lower() for token in tokenize(f.read()) if token.lower() not in stopwords]))
+    return {k for k, v in freq.most_common(limit)}
+
+
 def create_cooccurrence_matrix(filepath, mfw, window_size, stopwords=STOPWORDS):
     voc = {}
     row = []
