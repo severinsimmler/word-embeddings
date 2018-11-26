@@ -1,4 +1,5 @@
 import os
+import collections
 
 import nltk
 import regex as re
@@ -47,7 +48,7 @@ def create_cooccurrence_matrix(filepath, mfw, window_size, stopwords=STOPWORDS):
                             data.append(1)
                             row.append(i)
                             col.append(j)
-    csr = sparse.coo_matrix((data, (row, col))).tocsr()
+    csr = scipy.sparse.coo_matrix((data, (row, col))).tocsr()
     df = pd.SparseDataFrame(csr)
     voc = dict((v, k) for k, v in voc.items())
     df = df.rename(index=voc); df = df.rename(columns=voc)
