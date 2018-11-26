@@ -5,6 +5,7 @@ import nltk
 import regex as re
 import pandas as pd
 import scipy.sparse
+import sklearn
 
 
 STOPWORDS = set(nltk.corpus.stopwords.words("german"))
@@ -57,3 +58,8 @@ def create_cooccurrence_matrix(filepath, mfw, window_size, stopwords=STOPWORDS):
 
 def save_matrix(matrix, filepath):
     matrix.to_csv(filepath)
+
+
+def load_matrix(filepath):
+    matrix = pd.read_csv(filepath)
+    return matrix
