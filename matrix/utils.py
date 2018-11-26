@@ -37,7 +37,7 @@ def create_cooccurrence_matrix(filepath, mfw, window_size, stopwords=STOPWORDS):
     for root, dirs, files in os.walk(filepath):
         for file_ in files:
             with open(os.path.join(root, file_), "r", encoding="utf-8") as f:
-                # Does not load the whole file:
+                # Does not load the whole file, but line by line:
                 for line in f:
                     sentences = nltk.sent_tokenize(line)
                     for sentence in sentences:
@@ -56,12 +56,11 @@ def create_cooccurrence_matrix(filepath, mfw, window_size, stopwords=STOPWORDS):
                                 data.append(1)
                                 row.append(i)
                                 col.append(j)
-                    break
     csr = scipy.sparse.coo_matrix((data, (row, col))).tocsr()
     df = pd.SparseDataFrame(csr)
     voc = dict((v, k) for k, v in voc.items())
     df = df.rename(index=voc); df = df.rename(columns=voc)
-    return df
+    return df, csr
 
 
 def save_matrix(matrix, filepath):

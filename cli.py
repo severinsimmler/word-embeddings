@@ -3,7 +3,7 @@
 import argparse
 import os
 import matrix
-
+import sklearn
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog="matrix-tool",
@@ -16,10 +16,10 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    coo_matrix = matrix.utils.create_cooccurrence_matrix(args.corpus,
-                                                         args.vocab,
-                                                         args.window)
-    #similarities = matrix.utils.create_similarity_matrix(coo_matrix)
+    coo_matrix, csr = matrix.utils.create_cooccurrence_matrix(args.corpus,
+                                                              args.vocab,
+                                                              args.window)
+    similarities = sklearn.metrics.pairwise.cosine_similarity(csr)
 
     matrix.utils.save_matrix(coo_matrix, os.path.join(args.output, "coo.csv"))
     #matrix.utils.save_matrix(similarities, os.path.join(args.output, "sim.csv"))
