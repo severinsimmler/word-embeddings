@@ -1,5 +1,4 @@
 import os
-import pickle
 
 import nltk
 import regex as re
@@ -8,10 +7,6 @@ import scipy.sparse
 
 
 STOPWORDS = set(nltk.corpus.stopwords.words("german"))
-
-
-def load_pickle(filepath):
-    return pickle.load(filepath)
 
 
 def tokenize(text, pattern=r"\p{L}+\p{P}?\p{L}+"):
