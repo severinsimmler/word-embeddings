@@ -51,4 +51,4 @@ def create_cooccurrence_matrix(filepath, mfw, window_size, stopwords=STOPWORDS):
 
 
 def save_matrix(matrix, filepath):
-    pass
+    matrix.to_csv(filepath)
