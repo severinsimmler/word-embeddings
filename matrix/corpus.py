@@ -30,7 +30,8 @@ class Wikipedia:
                                                                      analyzer='word',
                                                                      sublinear_tf=True, vocabulary=mfw)
         vectorizer.fit_transform(corpus_files)
-        return dict(zip(vectorizer.get_feature_names(), vectorizer.idf_))
+        tfidf_weights = dict(zip(vectorizer.get_feature_names(), vectorizer.idf_))
+        return tfidf_weights
 
     @staticmethod
     def load_mfw(filepath):
@@ -57,7 +58,7 @@ class Wikipedia:
         for text in self.sentences if sentences else self.lines:
             yield list(utils.tokenize(text, self.pattern))
 
-    def sparse_coo_matrix(self, mfw, stopwords=utils.STOPWORDS, sentences=False, window_size=2):
+    def sparse_coo_matrix(self, mfw, stopwords=utils.STOPWORDS, sentences=False, window_size=2, tfidf_weights=None):
         voc = {}
         row = []
         col = []
@@ -73,7 +74,13 @@ class Wikipedia:
                     if pos2 == pos or tokens[pos2] in stopwords or tokens[pos2] not in mfw:
                         continue
                     j = voc.setdefault(tokens[pos2], len(voc))
-                    data.append(1)
+                    if tfidf_weights is None:
+                        data.append(1)
+                    else:
+                        try:
+                            data.append(tfidf_weights[tokens[pos2]])
+                        except KeyError:
+                            data.append(1)
                     row.append(i)
                     col.append(j)
         return scipy.sparse.coo_matrix((data, (row, col))).tocsr(), voc
