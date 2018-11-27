@@ -95,6 +95,6 @@ class Wikipedia:
         return df
 
     @staticmethod
-    def tfidf(matrix):
-        transformer = sklearn.feature_extraction.text.TfidfTransformer()
+    def tfidf(matrix, sublinear_tf=True):
+        transformer = sklearn.feature_extraction.text.TfidfTransformer(sublinear_tf=sublinear_tf)
         return transformer.fit_transform(matrix)
