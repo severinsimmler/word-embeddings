@@ -60,17 +60,25 @@ if __name__ == "__main__":
 
     logging.info("Creating sparse matrix...")
     # Create sparse scipy matrix from corpus:
-    csr, vocab = wikipedia.sparse_coo_matrix(mfw,
-                                             stopwords=matrix.utils.STOPWORDS if not args.stopwords else stopwords,
-                                             sentences=args.sentences,
-                                             window_size=args.window)
+    if args.doc_tfidf:
+        tfidf_weights = wikipedia.create_tfidf_features(mfw=mfw)
+        csr, vocab = wikipedia.sparse_coo_matrix(mfw,
+                                                 stopwords=matrix.utils.STOPWORDS if not args.stopwords else stopwords,
+                                                 sentences=args.sentences,
+                                                 window_size=args.window, tfidf_weights=tfidf_weights)
+    else:
+        csr, vocab = wikipedia.sparse_coo_matrix(mfw,
+                                                 stopwords=matrix.utils.STOPWORDS if not args.stopwords else stopwords,
+                                                 sentences=args.sentences,
+                                                 window_size=args.window)
 
     # Normalize with tf-idf:
-    tfidf = wikipedia.tfidf(csr)
+    if args.global_tfidf:
+        csr = wikipedia.tfidf(csr)
 
     logging.info("Calculating similarities...")
     # Calculate cosine similarity:
-    similarities = wikipedia.similarities(tfidf, vocab)
+    similarities = wikipedia.similarities(csr, vocab)
 
     logging.info("Sorting similarities...")
     # Sorting ascending (the higher the value, the more similar a vector):
@@ -80,6 +88,6 @@ if __name__ == "__main__":
 
     logging.info("Scipy matrix to pandas matrix...")
     # Scipy sparse matrix to pandas SparseDataFrame:
-    df = wikipedia._sparse2dataframe(tfidf, vocab, sparse=True)
+    df = wikipedia._sparse2dataframe(csr, vocab, sparse=True)
     logging.info("Saving to file...")
     df.to_csv("coo-matrix.csv")
