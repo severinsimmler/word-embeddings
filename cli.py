@@ -3,6 +3,7 @@
 import argparse
 import logging
 import os
+import pickle
 
 import sklearn
 
@@ -21,6 +22,7 @@ if __name__ == "__main__":
     parser.add_argument("--suffix", help="Suffix of the text files.")
     parser.add_argument("--lowercase", help="Use this parameter to lowercase all letters.", action="store_true")
     parser.add_argument("--mfw", help="Path to JSON file with most frequent words.")
+    parser.add_argument("--mfw_pkl", help="Path to pickle file with most frequent words.")
     parser.add_argument("--n-mfw", help="Count tokens and use the n most frequent words.", type=int)
     parser.add_argument("--window", help="Context window size.", type=int)
     parser.add_argument("--sentences", help="Use sentences instead of lines.", action="store_true")
@@ -50,6 +52,9 @@ if __name__ == "__main__":
     # Load most frequent words from a file:
     if args.mfw:
         mfw = wikipedia.load_mfw(args.mfw)
+    elif args.mfw_pkl:
+        with open(args.mfw_pkl, "rb") as pkl:
+            mfw = pickle.load(pkl)
     # Or count them:
     elif args.n_mfw:
         mfw = wikipedia.mfw(args.n_mfw,
