@@ -27,6 +27,8 @@ if __name__ == "__main__":
     parser.add_argument("--output", help="Path to output directory.")
     parser.add_argument("--stopwords", help="Optional external stopwords list.")
     parser.add_argument("--term", help="Get top 50 nearest neighbors for this term.")
+    parser.add_argument("--sublinear_tf", help="Apply sublinear tf scaling, i.e. replace tf with 1 + log(tf).",
+                        action="store_true")
 
     args = parser.parse_args()
 
