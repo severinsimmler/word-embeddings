@@ -87,7 +87,7 @@ class Wikipedia:
 
     @staticmethod
     def similarities(matrix, voc):
-        similarities = sklearn.metrics.pairwise.cosine_similarity(matrix, dense_output=True)
+        similarities = sklearn.metrics.pairwise.cosine_similarity(matrix, dense_output=False)
         df = pd.SparseDataFrame(similarities)
         voc = dict((v, k) for k, v in voc.items())
         df = df.rename(index=voc)

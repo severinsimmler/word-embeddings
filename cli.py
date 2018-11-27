@@ -29,32 +29,46 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
+    # Construct Wikipedia corpus object:
     wikipedia = matrix.corpus.Wikipedia(path=args.corpus,
                                         suffix=args.suffix,
                                         lowercase=args.lowercase)
 
+    # Read stopwords from file, if any (using NLTK otherwise):
     if args.stopwords:
         with Path(args.stopwords).open("r", encoding="utf-8") as textfile:
             stopwords = textfile.read().split("\n")
 
+    # Load most frequent words from a file:
     if args.mfw:
         mfw = wikipedia.load_mfw(args.mfw)
+    # Or count them:
     elif args.n_mfw:
-        mfw = wikipedia.mfw(args.n_mfw, matrix.utils.STOPWORDS if not args.stopwords else stopwords)
+        mfw = wikipedia.mfw(args.n_mfw,
+                            matrix.utils.STOPWORDS if not args.stopwords else stopwords)
     else:
         raise ValueError("You have to set either a threshold for the most frequent words, "
                          "or pass a path to a JSON file with most frequent words.")
 
+    logging.info("Creating sparse matrix...")
+    # Create sparse scipy matrix from corpus:
     csr, vocab = wikipedia.sparse_coo_matrix(mfw,
                                              stopwords=matrix.utils.STOPWORDS if not args.stopwords else stopwords,
                                              sentences=args.sentences,
                                              window_size=args.window)
 
-    df = wikipedia.sparse_coo_dataframe(mfw,
-                                        stopwords=matrix.utils.STOPWORDS if not args.stopwords else stopwords,
-                                        sentences=args.sentences,
-                                        window_size=args.window)
+    logging.info("Calculating similarities...")
+    # Calculate cosine similarity:
+    similarities = wikipedia.similarities(csr, vocab)
 
-    print(df)
-    print(wikipedia.similarities(csr, vocab))
+    logging.info("Sorting similarities...")
+    # Sorting ascending (the higher the value, the more similar a vector):
+    most_similar_stadt = similarities["kulturwissenschaften"].sort_values(ascending=False)[:50]
+    logging.info("Saving to file...")
+    most_similar_stadt.to_csv("most-similar-stadt.csv")
 
+    logging.info("Scipy matrix to pandas matrix...")
+    # Scipy sparse matrix to pandas SparseDataFrame:
+    df = wikipedia._sparse2dataframe(csr, vocab, sparse=True)
+    logging.info("Saving to file...")
+    df.to_csv("coo-matrix.csv")
