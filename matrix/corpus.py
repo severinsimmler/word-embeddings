@@ -10,7 +10,6 @@ import sklearn
 from . import utils
 
 
-
 class Wikipedia:
     def __init__(self, path, suffix=".txt", pattern=r"\p{L}+\p{P}?\p{L}+",
                  lowercase=True):
