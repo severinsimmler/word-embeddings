@@ -94,3 +94,8 @@ class Wikipedia:
         df = df.rename(index=voc)
         df = df.rename(columns=voc)
         return df
+
+    @staticmethod
+    def tfidf(matrix):
+        transformer = sklearn.feature_extraction.text.TfidfTransformer()
+        return transformer.fit_transform(matrix)

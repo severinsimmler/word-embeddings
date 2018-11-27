@@ -58,9 +58,12 @@ if __name__ == "__main__":
                                              sentences=args.sentences,
                                              window_size=args.window)
 
+    # Normalize with tf-idf:
+    tfidf = wikipedia.tfidf(csr)
+
     logging.info("Calculating similarities...")
     # Calculate cosine similarity:
-    similarities = wikipedia.similarities(csr, vocab)
+    similarities = wikipedia.similarities(tfidf, vocab)
 
     logging.info("Sorting similarities...")
     # Sorting ascending (the higher the value, the more similar a vector):
@@ -70,6 +73,6 @@ if __name__ == "__main__":
 
     logging.info("Scipy matrix to pandas matrix...")
     # Scipy sparse matrix to pandas SparseDataFrame:
-    df = wikipedia._sparse2dataframe(csr, vocab, sparse=True)
+    df = wikipedia._sparse2dataframe(tfidf, vocab, sparse=True)
     logging.info("Saving to file...")
     df.to_csv("coo-matrix.csv")
