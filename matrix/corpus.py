@@ -24,7 +24,7 @@ class Wikipedia:
                                            stopwords)
 
     def create_tfidf_features(self, mfw, sublinear_tf=True):
-        corpus_files = list(Path(self.path).rglob("*." + self.suffix))
+        corpus_files = list(Path(self.path).rglob("*" + self.suffix))
 
         vectorizer = sklearn.feature_extraction.text.TfidfVectorizer(input='filename', min_df=1, lowercase=sublinear_tf,
                                                                      analyzer='word',
