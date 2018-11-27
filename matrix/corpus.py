@@ -98,3 +98,14 @@ class Wikipedia:
     def tfidf(matrix, sublinear_tf=True):
         transformer = sklearn.feature_extraction.text.TfidfTransformer(sublinear_tf=sublinear_tf)
         return transformer.fit_transform(matrix)
+
+    @staticmethod
+    def create_tfidf_features(filepath, mfw, suffix, sublinear_tf=True):
+        corpus_files = list(Path(filepath).rglob("*." + suffix))
+
+        vectorizer = sklearn.feature_extraction.text.TfidfVectorizer(input='filename', min_df=1, lowercase=sublinear_tf,
+                                                                     analyzer='word',
+                                                                     sublinear_tf=True, vocabulary=mfw)
+        vectorizer.fit_transform(corpus_files)
+        return dict(zip(vectorizer.get_feature_names(), vectorizer.idf_))
+
