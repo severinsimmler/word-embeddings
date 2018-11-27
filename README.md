@@ -28,15 +28,23 @@ $ pipenv run python cli.py --help
 
 ```
 $ python cli.py --help
-usage: matrix-tool [-h] [--corpus CORPUS] [--vocab VOCAB] [--window WINDOW]
-                   [--output OUTPUT]
+usage: matrix-tool [-h] [--corpus CORPUS] [--suffix SUFFIX] [--lowercase]
+                   [--mfw MFW] [--n-mfw N_MFW] [--window WINDOW] [--sentences]
+                   [--output OUTPUT] [--stopwords STOPWORDS] [--term TERM]
 
 CLI tool to process a Wikipedia dump to a word-word matrix.
 
 optional arguments:
-  -h, --help       show this help message and exit
-  --corpus CORPUS  Path to corpus directory.
-  --vocab VOCAB    Path to vocabulary file.
-  --window WINDOW  Context window size.
-  --output OUTPUT  Path to output file.
+  -h, --help            show this help message and exit
+  --corpus CORPUS       Path to corpus directory.
+  --suffix SUFFIX       Suffix of the text files.
+  --lowercase           Use this parameter to lowercase all letters.
+  --mfw MFW             Path to JSON file with most frequent words.
+  --n-mfw N_MFW         Count tokens and use the n most frequent words.
+  --window WINDOW       Context window size.
+  --sentences           Use sentences instead of lines.
+  --output OUTPUT       Path to output directory.
+  --stopwords STOPWORDS
+                        Optional external stopwords list.
+  --term TERM           Get top 50 nearest neighbors for this term.
 ```
