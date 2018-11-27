@@ -27,6 +27,8 @@ def create_frequency_list(filepath, limit, stopwords=STOPWORDS):
 
 
 def create_cooccurrence_matrix(filepath, mfw, window_size, stopwords=STOPWORDS):
+    """DEPRECATED -> USE MATRIX.CORPUS.WIKIPEDIA CLASS AND ITS METHODS.
+    """
     if isinstance(mfw, str):
         with open(mfw, "r", encoding="utf-8") as f:
             mfw = json.load(f)

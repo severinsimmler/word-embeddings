@@ -26,6 +26,7 @@ if __name__ == "__main__":
     parser.add_argument("--sentences", help="Use sentences instead of lines.", action="store_true")
     parser.add_argument("--output", help="Path to output directory.")
     parser.add_argument("--stopwords", help="Optional external stopwords list.")
+    parser.add_argument("--term", help="Get top 50 nearest neighbors for this term.")
 
     args = parser.parse_args()
 
@@ -63,9 +64,9 @@ if __name__ == "__main__":
 
     logging.info("Sorting similarities...")
     # Sorting ascending (the higher the value, the more similar a vector):
-    most_similar_stadt = similarities["kulturwissenschaften"].sort_values(ascending=False)[:50]
+    most_similar_stadt = similarities[args.term].sort_values(ascending=False)[:50]
     logging.info("Saving to file...")
-    most_similar_stadt.to_csv("most-similar-stadt.csv")
+    most_similar_stadt.to_csv(f"most-similar-{args.term}.csv")
 
     logging.info("Scipy matrix to pandas matrix...")
     # Scipy sparse matrix to pandas SparseDataFrame:
