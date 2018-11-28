@@ -52,12 +52,12 @@ optional arguments:
 ## Example
 These are the top 20 nearest neighbors for the term `stadt`:
 
-<table border="1">
+<table>
   <thead>
     <tr style="text-align: right;">
-      <th></th>
-      <th>0</th>
-      <th>1</th>
+      <th>Rank</th>
+      <th>Term</th>
+      <th>Cosine similarity</th>
     </tr>
   </thead>
   <tbody>
