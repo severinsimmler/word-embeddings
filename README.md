@@ -53,7 +53,7 @@ optional arguments:
   --sublinear_tf        Apply sublinear tf scaling, i.e. replace tf with 1 +
                         log(tf).
   --doc_tfidf           Calculate tf-idf from article 'documents' as a weight
-                        for theword-word matrix.
+                        for the word-word matrix.
   --global_tfidf        Normalize word-word matrix with tf-idf transformation
 ```
 
