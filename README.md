@@ -29,8 +29,10 @@ $ pipenv run python cli.py --help
 ```
 $ python cli.py --help
 usage: matrix-tool [-h] [--corpus CORPUS] [--suffix SUFFIX] [--lowercase]
-                   [--mfw MFW] [--n-mfw N_MFW] [--window WINDOW] [--sentences]
-                   [--output OUTPUT] [--stopwords STOPWORDS] [--term TERM]
+                   [--mfw MFW] [--mfw_pkl MFW_PKL] [--n-mfw N_MFW]
+                   [--window WINDOW] [--sentences] [--output OUTPUT]
+                   [--stopwords STOPWORDS] [--term TERM] [--sublinear_tf]
+                   [--doc_tfidf] [--global_tfidf]
 
 CLI tool to process a Wikipedia dump to a word-word matrix.
 
@@ -40,6 +42,7 @@ optional arguments:
   --suffix SUFFIX       Suffix of the text files.
   --lowercase           Use this parameter to lowercase all letters.
   --mfw MFW             Path to JSON file with most frequent words.
+  --mfw_pkl MFW_PKL     Path to pickle file with most frequent words.
   --n-mfw N_MFW         Count tokens and use the n most frequent words.
   --window WINDOW       Context window size.
   --sentences           Use sentences instead of lines.
@@ -47,6 +50,11 @@ optional arguments:
   --stopwords STOPWORDS
                         Optional external stopwords list.
   --term TERM           Get top 50 nearest neighbors for this term.
+  --sublinear_tf        Apply sublinear tf scaling, i.e. replace tf with 1 +
+                        log(tf).
+  --doc_tfidf           Calculate tf-idf from article 'documents' as a weight
+                        for theword-word matrix.
+  --global_tfidf        Normalize word-word matrix with tf-idf transformation
 ```
 
 ## Example
