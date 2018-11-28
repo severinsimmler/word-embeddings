@@ -32,7 +32,7 @@ usage: matrix-tool [-h] [--corpus CORPUS] [--suffix SUFFIX] [--lowercase]
                    [--mfw MFW] [--mfw_pkl MFW_PKL] [--n-mfw N_MFW]
                    [--window WINDOW] [--sentences] [--output OUTPUT]
                    [--stopwords STOPWORDS] [--term TERM] [--sublinear_tf]
-                   [--doc_tfidf] [--global_tfidf]
+                   [--tfidf TFIDF]
 
 CLI tool to process a Wikipedia dump to a word-word matrix.
 
@@ -50,11 +50,9 @@ optional arguments:
   --stopwords STOPWORDS
                         Optional external stopwords list.
   --term TERM           Get top 50 nearest neighbors for this term.
+  --tfidf TFIDF         Use tf-idf weighting on the word-word matrix. Allowed values are: document, global_transform.
   --sublinear_tf        Apply sublinear tf scaling, i.e. replace tf with 1 +
                         log(tf).
-  --doc_tfidf           Calculate tf-idf from article 'documents' as a weight
-                        for the word-word matrix.
-  --global_tfidf        Normalize word-word matrix with tf-idf transformation
 ```
 
 ## Example
@@ -92,6 +90,7 @@ These are the top 20 nearest neighbors for the term `stadt`:
     <tr>
       <th>5</th>
       <td>stadtteil</td>
+
       <td>0.380550</td>
     </tr>
     <tr>

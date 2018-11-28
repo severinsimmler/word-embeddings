@@ -32,11 +32,8 @@ if __name__ == "__main__":
     parser.add_argument("--term", help="Get top 50 nearest neighbors for this term.")
     parser.add_argument("--sublinear_tf", help="Apply sublinear tf scaling, i.e. replace tf with 1 + log(tf).",
                         action="store_true")
-    parser.add_argument("--doc_tfidf", help="Calculate tf-idf from article 'documents' as a weight for the"
-                                            "word-word matrix.",
-                        action="store_true")
-    parser.add_argument("--global_tfidf", help="Normalize word-word matrix with tf-idf transformation",
-                        action="store_true")
+    parser.add_argument("--tfidf", choices=["document", "global_transform"],
+                        help="Use tf-idf weighting on the word-word matrix. Allowed values are: document, global_transform.")
 
     args = parser.parse_args()
 
@@ -66,7 +63,7 @@ if __name__ == "__main__":
 
     logging.info("Creating sparse matrix...")
     # Create sparse scipy matrix from corpus:
-    if args.doc_tfidf:
+    if args.tfidf == "document":
         tfidf_weights = wikipedia.create_tfidf_features(mfw=mfw)
         csr, vocab = wikipedia.sparse_coo_matrix(mfw,
                                                  stopwords=matrix.utils.STOPWORDS if not args.stopwords else stopwords,
@@ -79,7 +76,7 @@ if __name__ == "__main__":
                                                  window_size=args.window)
 
     # Normalize with tf-idf:
-    if args.global_tfidf:
+    if args.tfidf == "global_transform":
         csr = wikipedia.tfidf(csr)
 
     logging.info("Calculating similarities...")
