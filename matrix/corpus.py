@@ -40,7 +40,7 @@ class Wikipedia:
 
     @property
     def lines(self):
-        for file in self.path.glob(f"*{self.suffix}"):
+        for file in self.path.glob(f"**/*{self.suffix}"):
             logging.info(f"Processing '{file}'...")
             with file.open("r", encoding="utf-8") as textfile:
                 # Lazy reading:
