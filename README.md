@@ -90,7 +90,6 @@ These are the top 20 nearest neighbors for the term `stadt`:
     <tr>
       <th>5</th>
       <td>stadtteil</td>
-
       <td>0.380550</td>
     </tr>
     <tr>
