@@ -54,7 +54,7 @@ These are the top 20 nearest neighbors for the term `stadt`:
 
 <table>
   <thead>
-    <tr style="text-align: right;">
+    <tr>
       <th>Rank</th>
       <th>Term</th>
       <th>Cosine similarity</th>
