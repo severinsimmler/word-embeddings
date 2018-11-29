@@ -56,9 +56,13 @@ optional arguments:
 ```
 
 ## Example
-These are the top 20 nearest neighbors for the term `stadt`:
+These are the top 20 nearest neighbors for the term `stadt` with varying parameters. The word frequencies were determined by sliding over the entire corpus with a window of 2. The frequencies are TF-IDF weighted. For all vectors the cosine similarity was calculated. The corpus contained a total of 1,981,189 articles from the German Wikipedia.
 
 ### Context for IDF (in TF-IDF)
+
+```
+$ python cli.py --corpus wikipedia --suffix .txt --lowercase --mfw mfw.json --tfidf global_transform --term stadt
+```
 
 <table>
   <thead>
@@ -172,11 +176,14 @@ These are the top 20 nearest neighbors for the term `stadt`:
   </tbody>
 </table>
 
-The word frequencies were determined by sliding over the entire corpus with a window of 2 tokens. The frequencies are TF-IDF weighted (document = context = window). For all vectors the cosine similarity was calculated. The corpus contained a total of 1,981,189 articles from the German Wikipedia. The runtime was about 21 hours (on one CPU).
 
 ### Articles for IDF (in TF-IDF)
-
 #### Without sublinear TF scaling
+
+```
+$ python cli.py --corpus wikipedia --suffix .txt --lowercase --mfw mfw.json --tfidf document --term stadt
+```
+
 <table>
   <thead>
     <tr>
@@ -290,6 +297,10 @@ The word frequencies were determined by sliding over the entire corpus with a wi
 </table>
 
 #### With sublinear TF scaling
+
+```
+$ python cli.py --corpus wikipedia --suffix .txt --lowercase --mfw mfw.json --tfidf global_transform --term stadt --sublinear_tf
+```
 
 <table>
   <thead>
