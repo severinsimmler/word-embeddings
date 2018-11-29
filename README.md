@@ -294,9 +294,9 @@ The word frequencies were determined by sliding over the entire corpus with a wi
 <table>
   <thead>
     <tr>
-      <th></th>
-      <th>0</th>
-      <th>1</th>
+      <th>Rank</th>
+      <th>Term</th>
+      <th>Cosine similarity</th>
     </tr>
   </thead>
   <tbody>
