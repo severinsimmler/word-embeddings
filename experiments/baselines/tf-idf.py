@@ -39,6 +39,7 @@ if __name__ == "__main__":
     accuracies = list()
     data = pd.read_csv("../../data/classification-corpus/final-corpus.csv")
     classes = data["category"].drop_duplicates().tolist()
+    labels = classes.copy()
     vec = TfidfVectorizer().fit_transform(data["text"])
     Y = LabelEncoder().fit_transform(data["category"])
 
