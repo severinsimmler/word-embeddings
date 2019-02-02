@@ -7,7 +7,7 @@ from sklearn.model_selection import cross_val_score,train_test_split
 from sklearn.linear_model import LogisticRegression, SGDClassifier
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.svm import SVC
-from sklearn.metrics import f1_score, classification_report, confusion_matrix
+from sklearn.metrics import f1_score, classification_report, confusion_matrix, accuracy_score
 import matplotlib
 matplotlib.use('agg')
 import matplotlib.pyplot as plt
@@ -36,6 +36,7 @@ def save_cross_val(clf, algorithm, data, labels, cv=10):
 
 if __name__ == "__main__":
     f1_scores = list()
+    accuracies = list()
     data = pd.read_csv("../../data/classification-corpus/final-corpus.csv")
     classes = data["category"].drop_duplicates().tolist()
     vec = TfidfVectorizer().fit_transform(data["text"])
@@ -62,6 +63,7 @@ if __name__ == "__main__":
     clf = MultinomialNB(alpha=.01)
     save_cross_val(clf, algorithm, vec, Y)
     f1_scores.append({"algorithm": algorithm, "score": f1_score(pred, y_test, average="macro")})
+    accuracies.append({"algorithm": algorithm, "score": cross_val_score(clf, data, labels, cv=10)})
     
 
     #######################
@@ -85,6 +87,7 @@ if __name__ == "__main__":
                              multi_class="ovr")
     save_cross_val(clf, algorithm, vec, Y)
     f1_scores.append({"algorithm": algorithm, "score": f1_score(pred, y_test, average="macro")})
+    accuracies.append({"algorithm": algorithm, "score": cross_val_score(clf, data, labels, cv=10)})
 
 
     ##########################
@@ -102,6 +105,7 @@ if __name__ == "__main__":
     clf = SVC(gamma="auto", C=1, coef0=0.0, kernel="poly")
     save_cross_val(clf, algorithm, vec, Y)
     f1_scores.append({"algorithm": algorithm, "score": f1_score(pred, y_test, average="macro")})
+    accuracies.append({"algorithm": algorithm, "score": cross_val_score(clf, data, labels, cv=10)})
 
 
     ####################
@@ -119,8 +123,13 @@ if __name__ == "__main__":
     clf = SGDClassifier(n_jobs=-1, max_iter=50,tol=1e-3, alpha=0.001)
     save_cross_val(clf, algorithm, vec, Y)
     f1_scores.append({"algorithm": algorithm, "score": f1_score(pred, y_test, average="macro")})
+    accuracies.append({"algorithm": algorithm, "score": cross_val_score(clf, data, labels, cv=10)})
 
     with open("f1-scores.json", "w", encoding="utf-8") as f:
         import json
         f.write(json.dumps(f1_scores))
+    
+    with open("accuracies.json", "w", encoding="utf-8") as f:
+        import json
+        f.write(json.dumps(accuracies))
 
