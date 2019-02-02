@@ -132,4 +132,9 @@ if __name__ == "__main__":
     with open("accuracies.json", "w", encoding="utf-8") as f:
         import json
         f.write(json.dumps(accuracies))
-
+    plt.figure()
+    ax = pd.DataFrame(accuracies).plot.box(vert=False, color="black")
+    ax.set_ylabel("Category")
+    ax.set_xlabel("Accuracy")
+    plt.savefig("accuracies.svg")
+    
