@@ -11,6 +11,7 @@ from sklearn.metrics import f1_score, classification_report, confusion_matrix
 import matplotlib
 matplotlib.use('agg')
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 
 def save_classification_report(algorithm, y_pred, y_true, labels):
@@ -19,28 +20,13 @@ def save_classification_report(algorithm, y_pred, y_true, labels):
         file.write(report)
 
 
-def plot_confusion_matrix(cm, classes, algorithm, cmap=plt.cm.Blues):
-    plt.figure()
-    plt.imshow(cm, interpolation="nearest", cmap=cmap)
-    plt.colorbar()
-    tick_marks = np.arange(len(classes))
-    plt.xticks(tick_marks, classes, rotation=45)
-    plt.yticks(tick_marks, classes)
-
-    fmt = "d"
-    thresh = cm.max() / 2.
-    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
-        plt.text(j, i, format(cm[i, j], fmt),
-                 horizontalalignment="center",
-                 verticalalignment="center",
-                 color="white" if cm[i, j] > thresh else "black",
-                 fontsize=7)
-
-    plt.ylabel("True label")
-    plt.xlabel("Predicted label")
-    plt.tight_layout()
+def plot_confusion_matrix(cm, classes, algorithm):
+    df = pd.DataFrame(cm, index=classes, columns=classes)
+    plt.figure(figsize=(10, 9))
+    sns.heatmap(df, annot=True, cmap=sns.color_palette("Blues"))
+    plrt.tight_layout()
     plt.savefig(f"{algorithm}.svg")
-    pd.DataFrame(cm, index=classes, columns=classes).to_csv(f"{algorithm}-cm.csv")
+    df.to_csv(f"{algorithm}-cm.csv")
 
 
 def save_cross_val(clf, algorithm, data, labels, cv=10):
