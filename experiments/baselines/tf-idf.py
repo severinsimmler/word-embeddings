@@ -50,7 +50,7 @@ def save_cross_val(clf, algorithm, data, labels, cv=10):
 
 if __name__ == "__main__":
     f1_scores = list()
-    data = pd.read_csv("test.csv")
+    data = pd.read_csv("../../data/classification-corpus/final-corpus.csv")
     classes = data["category"].drop_duplicates().tolist()
     vec = TfidfVectorizer().fit_transform(data["text"])
     Y = LabelEncoder().fit_transform(data["category"])
