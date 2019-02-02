@@ -51,6 +51,7 @@ if __name__ == "__main__":
     # MULTINOMIAL NAIVE BAYES #
     ###########################
     algorithm = "multinomial-naive-bayes"
+    print(algorithm)
     clf = MultinomialNB(alpha=.01)
     clf.fit(X_train, y_train)
     pred = clf.predict(X_test)
@@ -67,6 +68,7 @@ if __name__ == "__main__":
     # LOGISTIC REGRESSION #
     #######################
     algorithm = "logistic-regression"
+    print(algorithm)
     clf = LogisticRegression(solver="liblinear",
                              C=1,
                              penalty="l2",
@@ -89,6 +91,7 @@ if __name__ == "__main__":
     # SUPPORT VECTOR MACHINE #
     ##########################
     algorithm = "support-vector-machine"
+    print(algorithm)
     clf = SVC(gamma="auto", C=1, coef0=0.0, kernel="poly")
     clf.fit(X_train, y_train)
     pred = clf.predict(X_test)
@@ -105,6 +108,7 @@ if __name__ == "__main__":
     # GRADIENT DESCENT #
     ####################
     algorithm = "gradient-descent"
+    print(algorithm)
     clf = SGDClassifier(n_jobs=-1, max_iter=50,tol=1e-3, alpha=0.001)
     clf.fit(X_train,y_train)
     pred = clf.predict(X_test)
