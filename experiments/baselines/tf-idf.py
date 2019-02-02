@@ -1,4 +1,4 @@
-import itertools
+import json
 import pandas as pd
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -63,7 +63,7 @@ if __name__ == "__main__":
     clf = MultinomialNB(alpha=.01)
     save_cross_val(clf, algorithm, vec, Y)
     f1_scores.append({"algorithm": algorithm, "score": f1_score(pred, y_test, average="macro")})
-    accuracies.append({"algorithm": algorithm, "score": cross_val_score(clf, vec, Y, cv=10)})
+    accuracies.append({"algorithm": algorithm, "score": list(cross_val_score(clf, vec, Y, cv=10))})
     
 
     #######################
@@ -87,7 +87,7 @@ if __name__ == "__main__":
                              multi_class="ovr")
     save_cross_val(clf, algorithm, vec, Y)
     f1_scores.append({"algorithm": algorithm, "score": f1_score(pred, y_test, average="macro")})
-    accuracies.append({"algorithm": algorithm, "score": cross_val_score(clf, vec, Y, cv=10)})
+    accuracies.append({"algorithm": algorithm, "score": list(cross_val_score(clf, vec, Y, cv=10))})
 
 
     ##########################
@@ -105,7 +105,7 @@ if __name__ == "__main__":
     clf = SVC(gamma="auto", C=1, coef0=0.0, kernel="poly")
     save_cross_val(clf, algorithm, vec, Y)
     f1_scores.append({"algorithm": algorithm, "score": f1_score(pred, y_test, average="macro")})
-    accuracies.append({"algorithm": algorithm, "score": cross_val_score(clf, vec, Y, cv=10)})
+    accuracies.append({"algorithm": algorithm, "score": list(cross_val_score(clf, vec, Y, cv=10))})
 
 
     ####################
@@ -123,15 +123,7 @@ if __name__ == "__main__":
     clf = SGDClassifier(n_jobs=-1, max_iter=50,tol=1e-3, alpha=0.001)
     save_cross_val(clf, algorithm, vec, Y)
     f1_scores.append({"algorithm": algorithm, "score": f1_score(pred, y_test, average="macro")})
-    accuracies.append({"algorithm": algorithm, "score": cross_val_score(clf, vec, Y, cv=10)})
-
-    with open("f1-scores.json", "w", encoding="utf-8") as f:
-        import json
-        f.write(json.dumps(f1_scores))
-    
-    with open("accuracies.json", "w", encoding="utf-8") as f:
-        import json
-        f.write(json.dumps(accuracies))
+    accuracies.append({"algorithm": algorithm, "score": list(cross_val_score(clf, vec, Y, cv=10))})
 
     # accuracies boxplot
     plt.figure()
@@ -146,3 +138,9 @@ if __name__ == "__main__":
     ax.set_ylabel("Category")
     ax.set_xlabel("F1-Score")
     plt.savefig("f1-scores.svg")
+
+    with open("f1-scores.json", "w", encoding="utf-8") as f:
+        f.write(json.dumps(f1_scores))
+    
+    with open("accuracies.json", "w", encoding="utf-8") as f:
+        f.write(json.dumps(accuracies))
