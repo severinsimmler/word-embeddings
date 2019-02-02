@@ -13,9 +13,9 @@ matplotlib.use('agg')
 import matplotlib.pyplot as plt
 
 
-def save_classification_report(algorithm, y_pred, y_true):
+def save_classification_report(algorithm, y_pred, y_true, labels):
     with open(f"report-{algorithm}.txt", "w", encoding="utf-8") as file:
-        report = classification_report(y_true, y_pred)
+        report = classification_report(y_true, y_pred, labels)
         file.write(report)
 
 
@@ -68,7 +68,7 @@ if __name__ == "__main__":
     clf = MultinomialNB(alpha=.01)
     clf.fit(X_train, y_train)
     pred = clf.predict(X_test)
-    save_classification_report(algorithm, pred, y_test)
+    save_classification_report(algorithm, pred, y_test, classes)
     cm = confusion_matrix(y_test, pred)
     plot_confusion_matrix(cm, classes, algorithm)
     # cross val
@@ -87,7 +87,7 @@ if __name__ == "__main__":
                              multi_class="ovr")
     clf.fit(X_train, y_train)
     pred = clf.predict(X_test)
-    save_classification_report(algorithm, pred, y_test)
+    save_classification_report(algorithm, pred, y_test, classes)
     cm = confusion_matrix(y_test, pred)
     plot_confusion_matrix(cm, classes, algorithm)
     # cross val
@@ -106,7 +106,7 @@ if __name__ == "__main__":
     clf = SVC(gamma="auto", C=1, coef0=0.0, kernel="poly")
     clf.fit(X_train, y_train)
     pred = clf.predict(X_test)
-    save_classification_report(algorithm, pred, y_test)
+    save_classification_report(algorithm, pred, y_test, classes)
     cm = confusion_matrix(y_test, pred)
     plot_confusion_matrix(cm, classes, algorithm)
     # cross val
@@ -122,7 +122,7 @@ if __name__ == "__main__":
     clf = SGDClassifier(n_jobs=-1, max_iter=50,tol=1e-3, alpha=0.001)
     clf.fit(X_train,y_train)
     pred = clf.predict(X_test)
-    save_classification_report(algorithm, pred, y_test)
+    save_classification_report(algorithm, pred, y_test, classes)
     cm = confusion_matrix(y_test, pred)
     plot_confusion_matrix(cm, classes, algorithm)
     # cross val
