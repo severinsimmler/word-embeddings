@@ -4,9 +4,12 @@ import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import cross_val_score,train_test_split
-from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import LogisticRegression, SGDClassifier
 from sklearn.naive_bayes import MultinomialNB
+from sklearn.svm import SVC
 from sklearn.metrics import f1_score, classification_report, confusion_matrix
+import matplotlib
+matplotlib.use('agg')
 import matplotlib.pyplot as plt
 
 
@@ -17,6 +20,7 @@ def save_classification_report(algorithm, y_pred, y_true):
 
 
 def plot_confusion_matrix(cm, classes, algorithm, cmap=plt.cm.Blues):
+    plt.figure()
     plt.imshow(cm, interpolation="nearest", cmap=cmap)
     plt.colorbar()
     tick_marks = np.arange(len(classes))
@@ -28,12 +32,15 @@ def plot_confusion_matrix(cm, classes, algorithm, cmap=plt.cm.Blues):
     for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
         plt.text(j, i, format(cm[i, j], fmt),
                  horizontalalignment="center",
-                 color="white" if cm[i, j] > thresh else "black")
+                 verticalalignment="center",
+                 color="white" if cm[i, j] > thresh else "black",
+                 fontsize=7)
 
     plt.ylabel("True label")
     plt.xlabel("Predicted label")
     plt.tight_layout()
     plt.savefig(f"{algorithm}.svg")
+    pd.DataFrame(cm, index=classes, columns=classes).to_csv(f"{algorithm}-cm.csv")
 
 
 def save_cross_val(clf, algorithm, data, labels, cv=10):
@@ -42,7 +49,8 @@ def save_cross_val(clf, algorithm, data, labels, cv=10):
 
 
 if __name__ == "__main__":
-    data = pd.read_csv("../../data/classification-corpus/final-corpus.csv")
+    f1_scores = list()
+    data = pd.read_csv("test.csv")
     classes = data["category"].drop_duplicates().tolist()
     vec = TfidfVectorizer().fit_transform(data["text"])
     Y = LabelEncoder().fit_transform(data["category"])
@@ -66,6 +74,7 @@ if __name__ == "__main__":
     # cross val
     clf = MultinomialNB(alpha=.01)
     save_cross_val(clf, algorithm, vec, Y)
+    f1_scores.append({"algorithm": algorithm, "score": f1_score(pred, y_test, average="macro")})
     
 
     #######################
@@ -87,6 +96,7 @@ if __name__ == "__main__":
                              penalty="l2",
                              multi_class="ovr")
     save_cross_val(clf, algorithm, vec, Y)
+    f1_scores.append({"algorithm": algorithm, "score": f1_score(pred, y_test, average="macro")})
 
 
     ##########################
@@ -102,7 +112,7 @@ if __name__ == "__main__":
     # cross val
     clf = SVC(gamma="auto", C=1, coef0=0.0, kernel="poly")
     save_cross_val(clf, algorithm, vec, Y)
-
+    f1_scores.append({"algorithm": algorithm, "score": f1_score(pred, y_test, average="macro")})
 
 
     ####################
@@ -118,4 +128,9 @@ if __name__ == "__main__":
     # cross val
     clf = SGDClassifier(n_jobs=-1, max_iter=50,tol=1e-3, alpha=0.001)
     save_cross_val(clf, algorithm, vec, Y)
+    f1_scores.append({"algorithm": algorithm, "score": f1_score(pred, y_test, average="macro")})
+
+    with open("f1-scores.json", "w", encoding="utf-8") as f:
+        import json
+        f.write(json.dumps(f1_scores))
 
