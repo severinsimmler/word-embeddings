@@ -16,7 +16,7 @@ import seaborn as sns
 
 def save_classification_report(algorithm, y_pred, y_true, labels):
     with open(f"report-{algorithm}.txt", "w", encoding="utf-8") as file:
-        report = classification_report(y_true, y_pred, labels)
+        report = classification_report(y_true, y_pred, target_names=labels)
         file.write(report)
 
 
@@ -39,7 +39,6 @@ if __name__ == "__main__":
     accuracies = list()
     data = pd.read_csv("../../data/classification-corpus/final-corpus.csv")
     classes = data["category"].drop_duplicates().tolist()
-    labels = classes.copy()
     vec = TfidfVectorizer().fit_transform(data["text"])
     Y = LabelEncoder().fit_transform(data["category"])
 
@@ -64,7 +63,7 @@ if __name__ == "__main__":
     clf = MultinomialNB(alpha=.01)
     save_cross_val(clf, algorithm, vec, Y)
     f1_scores.append({"algorithm": algorithm, "score": f1_score(pred, y_test, average="macro")})
-    accuracies.append({"algorithm": algorithm, "score": cross_val_score(clf, data, labels, cv=10)})
+    accuracies.append({"algorithm": algorithm, "score": cross_val_score(clf, data, classes, cv=10)})
     
 
     #######################
@@ -88,7 +87,7 @@ if __name__ == "__main__":
                              multi_class="ovr")
     save_cross_val(clf, algorithm, vec, Y)
     f1_scores.append({"algorithm": algorithm, "score": f1_score(pred, y_test, average="macro")})
-    accuracies.append({"algorithm": algorithm, "score": cross_val_score(clf, data, labels, cv=10)})
+    accuracies.append({"algorithm": algorithm, "score": cross_val_score(clf, data, classes, cv=10)})
 
 
     ##########################
@@ -106,7 +105,7 @@ if __name__ == "__main__":
     clf = SVC(gamma="auto", C=1, coef0=0.0, kernel="poly")
     save_cross_val(clf, algorithm, vec, Y)
     f1_scores.append({"algorithm": algorithm, "score": f1_score(pred, y_test, average="macro")})
-    accuracies.append({"algorithm": algorithm, "score": cross_val_score(clf, data, labels, cv=10)})
+    accuracies.append({"algorithm": algorithm, "score": cross_val_score(clf, data, classes, cv=10)})
 
 
     ####################
@@ -124,7 +123,7 @@ if __name__ == "__main__":
     clf = SGDClassifier(n_jobs=-1, max_iter=50,tol=1e-3, alpha=0.001)
     save_cross_val(clf, algorithm, vec, Y)
     f1_scores.append({"algorithm": algorithm, "score": f1_score(pred, y_test, average="macro")})
-    accuracies.append({"algorithm": algorithm, "score": cross_val_score(clf, data, labels, cv=10)})
+    accuracies.append({"algorithm": algorithm, "score": cross_val_score(clf, data, classes, cv=10)})
 
     with open("f1-scores.json", "w", encoding="utf-8") as f:
         import json
