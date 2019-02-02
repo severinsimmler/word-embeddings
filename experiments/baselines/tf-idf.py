@@ -24,7 +24,7 @@ def plot_confusion_matrix(cm, classes, algorithm):
     df = pd.DataFrame(cm, index=classes, columns=classes)
     plt.figure(figsize=(10, 9))
     sns.heatmap(df, annot=True, cmap=sns.color_palette("Blues"))
-    plrt.tight_layout()
+    plt.tight_layout()
     plt.savefig(f"{algorithm}.svg")
     df.to_csv(f"{algorithm}-cm.csv")
 
