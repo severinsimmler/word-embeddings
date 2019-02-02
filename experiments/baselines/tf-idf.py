@@ -40,7 +40,7 @@ if __name__ == "__main__":
     data = pd.read_csv("../../data/classification-corpus/final-corpus.csv")
     classes = data["category"].drop_duplicates().tolist()
     vec = TfidfVectorizer().fit_transform(data["text"])
-    Y = data["category"]
+    Y = LabelEncoder().fit_transform(data["category"])
 
     X_train, X_test, y_train, y_test = train_test_split(vec,
                                                         Y,
