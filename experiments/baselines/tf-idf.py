@@ -36,7 +36,7 @@ def save_cross_val(clf, algorithm, data, labels, cv=10):
 
 if __name__ == "__main__":
     f1_scores = list()
-    accuracies = list()
+    accuracies = pd.DataFrame()
     data = pd.read_csv("../../data/classification-corpus/final-corpus.csv")
     classes = data["category"].drop_duplicates().tolist()
     vec = TfidfVectorizer().fit_transform(data["text"])
@@ -63,7 +63,7 @@ if __name__ == "__main__":
     clf = MultinomialNB(alpha=.01)
     save_cross_val(clf, algorithm, vec, Y)
     f1_scores.append({"algorithm": algorithm, "score": f1_score(pred, y_test, average="macro")})
-    accuracies.append({"algorithm": algorithm, "score": list(cross_val_score(clf, vec, Y, cv=10))})
+    accuracies[algorithm] = cross_val_score(clf, vec, Y, cv=10)
     
 
     #######################
@@ -87,7 +87,7 @@ if __name__ == "__main__":
                              multi_class="ovr")
     save_cross_val(clf, algorithm, vec, Y)
     f1_scores.append({"algorithm": algorithm, "score": f1_score(pred, y_test, average="macro")})
-    accuracies.append({"algorithm": algorithm, "score": list(cross_val_score(clf, vec, Y, cv=10))})
+    accuracies[algorithm] = cross_val_score(clf, vec, Y, cv=10)
 
 
     ##########################
@@ -105,7 +105,7 @@ if __name__ == "__main__":
     clf = SVC(gamma="auto", C=1, coef0=0.0, kernel="poly")
     save_cross_val(clf, algorithm, vec, Y)
     f1_scores.append({"algorithm": algorithm, "score": f1_score(pred, y_test, average="macro")})
-    accuracies.append({"algorithm": algorithm, "score": list(cross_val_score(clf, vec, Y, cv=10))})
+    accuracies[algorithm] = cross_val_score(clf, vec, Y, cv=10)
 
 
     ####################
@@ -123,24 +123,17 @@ if __name__ == "__main__":
     clf = SGDClassifier(n_jobs=-1, max_iter=50,tol=1e-3, alpha=0.001)
     save_cross_val(clf, algorithm, vec, Y)
     f1_scores.append({"algorithm": algorithm, "score": f1_score(pred, y_test, average="macro")})
-    accuracies.append({"algorithm": algorithm, "score": list(cross_val_score(clf, vec, Y, cv=10))})
+    accuracies[algorithm] = cross_val_score(clf, vec, Y, cv=10)
 
     # accuracies boxplot
     plt.figure()
-    ax = pd.DataFrame(accuracies).plot.box(vert=False, color="black")
+    ax = accuracies.plot.box(vert=False, color="black")
     ax.set_ylabel("Category")
     ax.set_xlabel("Accuracy")
+    plt.tight_layout()
     plt.savefig("accuracies.svg")
-    
-    # f1 boxplot
-    plt.figure()
-    ax = pd.DataFrame(f1_scores).plot.box(vert=False, color="black")
-    ax.set_ylabel("Category")
-    ax.set_xlabel("F1-Score")
-    plt.savefig("f1-scores.svg")
 
+    accuracies.to_csv("accuracies.csv")
+    
     with open("f1-scores.json", "w", encoding="utf-8") as f:
         f.write(json.dumps(f1_scores))
-    
-    with open("accuracies.json", "w", encoding="utf-8") as f:
-        f.write(json.dumps(accuracies))
