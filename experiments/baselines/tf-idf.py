@@ -95,14 +95,14 @@ if __name__ == "__main__":
     ##########################
     algorithm = "support-vector-machine"
     print(algorithm)
-    clf = SVC(gamma="auto", C=1, coef0=0.0, kernel="poly")
+    clf = SVC(gamma="auto", C=1, coef0=0.0, kernel="linear")
     clf.fit(X_train, y_train)
     pred = clf.predict(X_test)
     save_classification_report(algorithm, pred, y_test, classes)
     cm = confusion_matrix(y_test, pred)
     plot_confusion_matrix(cm, classes, algorithm)
     # cross val
-    clf = SVC(gamma="auto", C=1, coef0=0.0, kernel="poly")
+    clf = SVC(gamma="auto", C=1, coef0=0.0, kernel="linear")
     save_cross_val(clf, algorithm, vec, Y)
     f1_scores.append({"algorithm": algorithm, "score": f1_score(pred, y_test, average="macro")})
     accuracies[algorithm] = cross_val_score(clf, vec, Y, cv=10)
